@@ -14,9 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Images from Pixabay.
+ */
 public class FadingImage extends Application {
     private ResizableCanvas canvas;
-    private static List<OpacityImage> images;
+    private static List<Image> images;
     private static final int IMAGE_AMOUNT = 6;
     private int currentImageIndex = 0;
     private int nextImageIndex = 1;
@@ -32,7 +35,6 @@ public class FadingImage extends Application {
 
         images = new ArrayList<>(IMAGE_AMOUNT);
         loadImages();
-        images.get(0).setAlpha(1);
 
         canvas.setFocusTraversable(true);
         mainPane.setOnKeyPressed(keyEvent -> {
@@ -57,10 +59,10 @@ public class FadingImage extends Application {
 
     public void draw(FXGraphics2D graphics) {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
-        graphics.drawImage(images.get(currentImageIndex).getImage(), graphics.getTransform(), null);
+        graphics.drawImage(images.get(currentImageIndex), graphics.getTransform(), null);
 
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, nextAlpha));
-        graphics.drawImage(images.get(nextImageIndex).getImage(), graphics.getTransform(), null);
+        graphics.drawImage(images.get(nextImageIndex), graphics.getTransform(), null);
     }
 
     public void update(double deltaTime) {
@@ -90,7 +92,7 @@ public class FadingImage extends Application {
 
     private static void loadImages() {
         try {
-            for (int i = 1; i <= IMAGE_AMOUNT; i++) images.add(new OpacityImage(ImageIO.read(Objects.requireNonNull(FadingImage.class.getResourceAsStream("images/lynx-" + i + ".png")))));
+            for (int i = 1; i <= IMAGE_AMOUNT; i++) images.add(ImageIO.read(Objects.requireNonNull(FadingImage.class.getResourceAsStream("images/lynx-" + i + ".png"))));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

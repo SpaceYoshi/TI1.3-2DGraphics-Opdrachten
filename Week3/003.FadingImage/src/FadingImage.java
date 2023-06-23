@@ -57,7 +57,7 @@ public class FadingImage extends Application {
         stage.show();
     }
 
-    public void draw(FXGraphics2D graphics) {
+    private void draw(FXGraphics2D graphics) {
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
         graphics.drawImage(images.get(currentImageIndex), graphics.getTransform(), null);
 
@@ -65,7 +65,7 @@ public class FadingImage extends Application {
         graphics.drawImage(images.get(nextImageIndex), graphics.getTransform(), null);
     }
 
-    public void update(double deltaTime) {
+    private void update(double deltaTime) {
         transitionTimer += deltaTime;
 
         if (transitionTimer >= 3) {

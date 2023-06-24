@@ -22,7 +22,7 @@ public class VerletEngine extends Application {
     private ResizableCanvas canvas;
     private ArrayList<Particle> particles = new ArrayList<>();
     private ArrayList<Constraint> constraints = new ArrayList<>();
-    private final PositionConstraint mouseConstraint = new PositionConstraint(null);
+    private PositionConstraint mouseConstraint = new PositionConstraint(null);
     private static final String FILE_NAME = "Week4/001.Verlet/save.txt";
 
     @Override
@@ -157,6 +157,7 @@ public class VerletEngine extends Application {
             // Write the particles and constraints to the file
             objectOutputStream.writeObject(particles);
             objectOutputStream.writeObject(constraints);
+            objectOutputStream.writeObject(mouseConstraint);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,12 +170,13 @@ public class VerletEngine extends Application {
             // Read the particles and constraints from the file
             particles = (ArrayList<Particle>) objectInputStream.readObject();
             constraints = (ArrayList<Constraint>) objectInputStream.readObject();
+            mouseConstraint = (PositionConstraint) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void curtain(ActionEvent actionEvent) { // TODO
+    private void curtain(ActionEvent actionEvent) {
         particles.clear();
         constraints.clear();
 

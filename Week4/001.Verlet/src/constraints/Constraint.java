@@ -1,3 +1,5 @@
+package constraints;
+
 import org.jfree.fx.FXGraphics2D;
 
 public interface Constraint {

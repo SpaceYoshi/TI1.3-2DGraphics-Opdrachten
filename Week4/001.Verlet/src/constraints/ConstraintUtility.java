@@ -1,28 +1,14 @@
-import org.jfree.fx.FXGraphics2D;
-import java.awt.geom.Line2D;
+package constraints;
+
+import particles.Particle;
+
+import java.awt.*;
 import java.awt.geom.Point2D;
 
-public class DistanceConstraint implements Constraint {
-
-    private double distance;
-    private Particle a;
-    private Particle b;
-
-    public DistanceConstraint(Particle a, Particle b) {
-        this(a, b, a.getPosition().distance(b.getPosition()));
-    }
-
-    public DistanceConstraint(Particle a, Particle b, double distance) {
-        this.a = a;
-        this.b = b;
-        this.distance = distance;
-    }
-
-    @Override
-    public void satisfy() {
-
+public class ConstraintUtility {
+    static double SatisfyDualParticleConstraint(double constraintDistance, Particle b, Particle a) {
         double currentDistance = a.getPosition().distance(b.getPosition());
-        double adjustmentDistance = (currentDistance - distance) / 2;
+        double adjustmentDistance = (currentDistance - constraintDistance) / 2;
 
         Point2D BA = new Point2D.Double(b.getPosition().getX() - a.getPosition().getX(), b.getPosition().getY() - a.getPosition().getY());
         double length = BA.distance(0, 0);
@@ -37,10 +23,17 @@ public class DistanceConstraint implements Constraint {
                 a.getPosition().getY() + BA.getY() * adjustmentDistance));
         b.setPosition(new Point2D.Double(b.getPosition().getX() - BA.getX() * adjustmentDistance,
                 b.getPosition().getY() - BA.getY() * adjustmentDistance));
+
+        return currentDistance;
     }
 
-    @Override
-    public void draw(FXGraphics2D g2d) {
-        g2d.draw(new Line2D.Double(a.getPosition(), b.getPosition()));
+    static Color getTensionColor(double tension, double constraintDistance) {
+        double maxValue = 2 * constraintDistance; // red
+
+        if (tension > maxValue) tension = maxValue;
+
+        float hue = (float) ((1 - (tension - constraintDistance) / (maxValue - constraintDistance)) * 0.4f);
+        return Color.getHSBColor(hue, 1, 1);
     }
+
 }
